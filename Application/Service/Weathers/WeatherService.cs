@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjetStageSTIB.Application.Service.Weathers
 {
-    public class StationService
+    public class WeatherService
     {
     }
 }

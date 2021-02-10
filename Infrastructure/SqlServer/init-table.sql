@@ -183,10 +183,6 @@ Possède :
 
 -id_date ( la date de déplacement du bus)
 
- 
-
- 
-
 pour ameliorer la db ( eviter de faire des moves pour rien ) sinon on respect pas les regles
 
 */
