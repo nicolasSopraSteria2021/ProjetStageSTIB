@@ -15,6 +15,7 @@ namespace ProjetStageSTIB.Domain.Line
 
         DateTime HourDeparture { get; set; }
         DateTime HourArrival{ get; set; }
+
         
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 namespace ProjetStageSTIB.Domain.Categories
 {   
     /**
-     * A category define a vehicule like a Tram , Bus or Metro
+     * Une category est defini par une type de vehicule et un Id
      */
-     public class Cattegory : ICategory
+     public class Category : ICategory
     {
-        public string Vehicule_type { get ; set ; }
+        public string vehiculeType { get ; set ; }
         public int Id { get ; set ; }
     }
 }

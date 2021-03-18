@@ -10,7 +10,7 @@ namespace ProjetStageSTIB.Domain.Categories
  public interface ICategory : IEntity
     {
         //category du vehicule
-        string Vehicule_type { get; set; }
+        string vehiculeType { get; set; }
 
     }
 }

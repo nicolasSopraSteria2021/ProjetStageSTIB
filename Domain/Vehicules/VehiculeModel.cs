@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjetStageSTIB.Domain.Vehicule
+namespace ProjetStageSTIB.Domain.Vehicules
 {
     /**
     *
@@ -15,14 +15,18 @@ namespace ProjetStageSTIB.Domain.Vehicule
     *   a category is the reference for class category
     *   a delay_min is the time of delay 
     *   a delay_forecast is the time of delay by IA
-    *   an Id is the number of identification for a vehicule
+    *   an id is the number of identification for a vehicule
     */
-    public class Vehicule : IVehicule
+    public class VehiculeModel : IVehicule
     {
         public ILine Line { get ; set ; }
         public ICategory Category { get ; set ; }
-        public double Delay_min { get ; set ; }
-        public double Delay_forecast { get ; set ; }
+     
         public int Id { get ; set ; }
+
+        public static implicit operator int(VehiculeModel v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

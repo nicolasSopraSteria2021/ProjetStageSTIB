@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 
 namespace ProjetStageSTIB.Domain.Line
 {
-    public class Line : ILine
+    /*
+     * Une ligne est composé d'un numero de ligne,
+     * d'une station de départ et d'arrivé ( Objet Station ) ,
+     * d'une Heure de départ et d'arriver 
+     * et d'un numéro d'indentification
+     */
+    public class LineModel : ILine
     {
         public int LineNumber { get ; set ; }
         public IStation StationDeparture { get ; set ; }

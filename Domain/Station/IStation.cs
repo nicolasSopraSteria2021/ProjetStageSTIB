@@ -8,6 +8,7 @@ namespace ProjetStageSTIB.Domain.Station
 {
    public interface IStation : IEntity
     {
+        
         string StationName { get; set; }
 
     }

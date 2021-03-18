@@ -7,16 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjetStageSTIB.Domain.Vehicule
+namespace ProjetStageSTIB.Domain.Vehicules
 {
   public  interface IVehicule : IEntity
     {
         
         ILine Line { get; set; }
-
-        ICategory Category { get; set; }
-
-        double Delay_min { get; set; }
-        double Delay_forecast { get; set; }
+       ICategory Category { get; set; }
+       
     }
 }

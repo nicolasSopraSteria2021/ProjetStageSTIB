@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace ProjetStageSTIB.Domain.Station
 {
-    /**
-    *
-    *A Station is define by a Name an identification 
-    */
+
+    
+    //une station est defini par une numero d'identification et d'un nom de station
     public class Station : IStation
     {
         public string StationName { get ; set ; }

@@ -12,10 +12,10 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Factories
         public ICategory CreateFromReader(SqlDataReader reader)
         {
             //return category Object
-            return new Cattegory
+            return new Domain.Categories.Category
             {
                 Id = reader.GetInt32(reader.GetOrdinal(CategoryServer.ColId)),
-                Vehicule_type = reader.GetString(reader.GetOrdinal(CategoryServer.ColType))
+                vehiculeType = reader.GetString(reader.GetOrdinal(CategoryServer.ColType))
             };
         }
     }

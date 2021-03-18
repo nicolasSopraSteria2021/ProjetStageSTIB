@@ -16,7 +16,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Factories
             return new Station
             {
                 Id = reader.GetInt32(reader.GetOrdinal(StationServer.ColId)),
-                StationName = reader.GetString(reader.GetOrdinal(StationServer.ColType))
+                StationName = reader.GetString(reader.GetOrdinal(StationServer.ColStationName))
 
             };
         }

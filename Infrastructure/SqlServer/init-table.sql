@@ -8,13 +8,11 @@ DROP TABLE IF EXISTS WEATHER;
 DROP TABLE IF EXISTS TRACKING_DATE;
 DROP TABLE IF EXISTS VEHICULE;
 DROP TABLE IF EXISTS TRACKING_VEHICULE;
-DROP TABLE IF EXISTS STATION;
 DROP TABLE IF EXISTS CATEGORY;
 DROP TABLE IF EXISTS LINE;
-
+DROP TABLE IF EXISTS STATION;
 
  
-
  
 
 /*
@@ -31,11 +29,11 @@ Possède :
 
 CREATE TABLE STATION(
 
-id INT IDENTITY NOT NULL,
+idstat INT IDENTITY NOT NULL,
 
 STATION_NAME VARCHAR(100) NOT NULL
 
-PRIMARY KEY(id)
+PRIMARY KEY(idstat)
 
 );
 
@@ -135,11 +133,11 @@ hour_departure datetime not null,
 
 hour_arrival datetime not null,
 
-primary key(id),
+primary key(idLine),
 
-FOREIGN KEY(id_station_departure) REFERENCES STATION (id),
+FOREIGN KEY(id_station_departure) REFERENCES STATION (idstat),
 
-FOREIGN KEY(id_station_arrival) REFERENCES STATION (id)
+FOREIGN KEY(id_station_arrival) REFERENCES STATION (idstat)
 
 );
 
@@ -151,11 +149,11 @@ la category du vehicule ( T/M/B )
 
 create table category(
 
-id int identity not null,
+idCat int identity not null,
 
 vehicule_type varchar(100) not null,
 
-primary key(id)
+primary key(idCat)
 
 );
 
@@ -177,10 +175,6 @@ Possède :
 
 -trip (le trajet du T/B/M) 
 
--delay_min float  ( retard réel)
-
--delay_forecast (retard prédits )
-
 -id_date ( la date de déplacement du bus)
 
 pour ameliorer la db ( eviter de faire des moves pour rien ) sinon on respect pas les regles
@@ -191,25 +185,21 @@ CREATE TABLE VEHICULE
 
 (
 
-id INT IDENTITY NOT NULL,
+idVeh INT IDENTITY NOT NULL,
 
 id_line INT NOT NULL,
 
 id_category INT not NULL,
 
-delay_min float not null,
-
-delay_forecast float not null,
-
 /*id_date int not null, */
 
-PRIMARY KEY(id),
+PRIMARY KEY(idVeh),
 
 /*FOREIGN KEY(id_date) REFERENCES TRACKING_DATE(id),*/
 
-FOREIGN KEY(id_category) REFERENCES category(id),
+FOREIGN KEY(id_category) REFERENCES category(idCat),
 
-FOREIGN KEY(id_line) REFERENCES line(id)
+FOREIGN KEY(id_line) REFERENCES line(idLine)
 
 );
 
@@ -227,12 +217,14 @@ create table tracking_vehicule (
 
                 date_observation datetime not null,
 
-                delay_min float not null,
+                delay_min Time not null,
 
-                delay_forecast float not null,
+                delay_forecast Time not null,
 
                 primary key(id),
 
-                FOREIGN KEY(id_vehicule) REFERENCES vehicule(id)
+                FOREIGN KEY(id_vehicule) REFERENCES vehicule(idVeh)
 
 );
+ 
+
