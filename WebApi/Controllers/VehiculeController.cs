@@ -1,14 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjetStageSTIB.Application.Service.Lines;
 using ProjetStageSTIB.Application.Service.Lines.Dto;
-using ProjetStageSTIB.Application.Service.Vehicules;
-using ProjetStageSTIB.Domain.Line;
-using ProjetStageSTIB.Domain.Vehicules;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace ProjetStageSTIB.WebApi.Controllers
 {
     //controller, c'est ici qu'on va etablir les appels que pourra faire le FT pour avoir accès aux éléments de la db
@@ -17,41 +9,54 @@ namespace ProjetStageSTIB.WebApi.Controllers
     public class VehiculeController : ControllerBase
     {
 
-        private readonly IVehiculeService _vehiculeService;
+     
         private readonly ILineService _lineService;
 
-        public VehiculeController(IVehiculeService vehiculeService,ILineService lineService)
+        public VehiculeController(ILineService lineService)
         {
-            _vehiculeService = vehiculeService;
             _lineService = lineService;
         }
 
-
         [HttpGet]
-        public ActionResult<IVehicule> GetVehicule()
+        [Route("lineGraph/{vehiculeType}/{value}")]
+        public ActionResult<DtoLineForChart> GetLineForGraph(string vehiculeType,string value)
         {
-            return Ok(_vehiculeService.GetVehicule());
+            return Ok(_lineService.getLineForCharts(vehiculeType,value));
         }
 
         [HttpGet]
-        [Route("lineGraph/{vehiculeType:int}")]
-        public ActionResult<ILine> GetLineForGraph(int vehiculeType)
-        {
-            return Ok(_lineService.getLineForCharts(vehiculeType));
-        }
-
-        [HttpGet]
-        [Route("numberLine/{vehiculeType:int}")]
-        public ActionResult<ILine> getLineNumberFromCategory(int vehiculeType)
+        [Route("numberLine/{vehiculeType}")]
+        public ActionResult<int> getLineNumberFromCategory(string vehiculeType)
         {
             return Ok(_lineService.getNumberLineByCategory(vehiculeType));
         }
 
         [HttpGet]
-        [Route("dataForecast/{lineNumber:int}")]
-        public ActionResult<DtoLineForLinearChart> GetForecastFromLine(int lineNumber)
+        [Route("dataForecast/{lineNumber:int}/{vehiculeType}/{monthNumber}")]
+        public ActionResult<DtoDelayByHourBarChart> GetForecastFromLine(int lineNumber, string vehiculeType, string monthNumber)
         {
-            return Ok(_lineService.GetForecastFromLine(lineNumber));
+            return Ok(_lineService.GetForecastFromLine(lineNumber,vehiculeType,monthNumber));
+        }
+
+        [HttpGet]
+        [Route("years")]
+        public ActionResult<int> GetYearsFromDb()
+        {
+            return Ok(_lineService.GetYearsFromDb());
+        }
+
+        [HttpGet]
+        [Route("month")]
+        public ActionResult<string> GetMonthFromDb()
+        {
+            return Ok(_lineService.GetMonthFromDb());
+        }
+
+        [HttpGet]
+        [Route("detailsWeather/{dateValue}/{vehiculeType}")]
+        public ActionResult<DtoDetailsWeather> getDetailsWeather(string vehiculeType, string dateValue)
+        {
+            return Ok(_lineService.getDetailsFromDate(vehiculeType,dateValue));
         }
 
     }

@@ -9,10 +9,9 @@ namespace ProjetStageSTIB.Application.Service.TrackingVehicules.Dto
     public class DtoQueryMostDelay
     {
 
-        public int idLine { get; set; }
+ 
         public int lineNumber { get; set; }
         public string stationDeparture { get; set; }
-        public string stationArrival { get; set; }
-        public string delayForecast { get; set; }
+        public int delayForecast { get; set; }
     }
 }

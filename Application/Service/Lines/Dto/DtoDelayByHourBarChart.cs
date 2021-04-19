@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjetStageSTIB.Application.Service.TrackingVehicules.Dto
+namespace ProjetStageSTIB.Application.Service.Lines.Dto
 {
-    //renvoie la date et le nombre de retard
-    public class DtoSpecificTableDateObservation
+    public class DtoDelayByHourBarChart
     {
-        public  int count { get; set; }
-        public string dateObservation { get; set; }
+        public int prediction { get; set; }
+
+        public string hourArrival { get; set; }
+        public int delayForecast { get; set; }
         public double snow { get; set; }
 
         public double relativeHumidity { get; set; }

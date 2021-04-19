@@ -1,8 +1,4 @@
-﻿using ProjetStageSTIB.Infrastructure.SqlServer.Vehicule;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ProjetStageSTIB.Infrastructure.SqlServer.Lines;
 
 namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
 {
@@ -20,63 +16,26 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
         public static readonly string reqGetObjetById = reqGetObjet + $" WHERE {ColId} = @{ColId}";
 
 
-        //requete générique pour recuperer le nombre de retard en fonction d'une date selon la category
-        public static readonly string reqCount = $"SELECT COUNT(DISTINCT({ColVehicule})) FROM {TableName} " +
-            $"INNER JOIN {VehiculeServer.TableName} " +
-            $"on {VehiculeServer.ColId} ={TrackingVehiculeServer.ColVehicule} " +
-            $"where date_observation >= @{ColDateObs} " +
-            $"AND date_observation< current_timestamp" +
-            $" AND VEHICULE.id_category=";
+        //renvoie le nombre de retard en fonction d'une date 
+        public static readonly string reqCount = $"select sum(delays) as 'retards' from line where date_observation >=@{ColDateObs} and date_observation<current_timestamp and vehiculeType like('";
 
-        //definition de la category ( 3 = bus , 2 = metro , 1 = Tram ) 
-        public static readonly string reqGetCountByBus = reqCount + $"3";
-        public static readonly string reqGetCountByMetro = reqCount + $"2";
-        public static readonly string reqGetCountByTram = reqCount + $"1";
+        public static readonly string reqGetCountByBus = reqCount + $"Bus')";
+        public static readonly string reqGetCountByMetro = reqCount + $"Metro')";
+        public static readonly string reqGetCountByTram = reqCount + $"Tram')";
 
-        //requete générique pour recuperer le temps de retard en fonction d'une date selon la category
-        public static readonly string reqGetTime = $"select sum(distinct( " +
-            $"(DATEPART(HOUR, tracking_vehicule.delay_forecast) * 3600) + " +
-            $"(DATEPART(MINUTE, tracking_vehicule.delay_forecast) * 60) +" +
-            $"(DATEPART(SECOND, tracking_vehicule.delay_forecast)))) " +
-            $" FROM tracking_vehicule " +
-            $"INNER JOIN VEHICULE on tracking_vehicule.id_vehicule = VEHICULE.idVeh " +
-            $"where date_observation >= @{ColDateObs} " +
-            $"AND date_observation< current_timestamp " +
-            $"AND VEHICULE.id_category=";
+      
+        //recupère le nombre de vehicule a l'heure 
+        public static readonly string reqCountNotDelay = $"select count(delays) as 'nonRetards' from line where date_observation >=@{ColDateObs} and date_observation<current_timestamp and delays = 0 ";
+        public static readonly string reqCountNotDelayBus =reqCountNotDelay+$"and vehiculeType like('Bus') ";
+        public static readonly string reqCountNotDelayMetro =reqCountNotDelay+$"and vehiculeType like('Metro') ";
+        public static readonly string reqCountNotDelayTram=reqCountNotDelay+$"and vehiculeType like('Tram') ";
 
-        //definition de la category ( 3 = bus , 2 = metro , 1 = Tram ) 
-        public static readonly string reqGetTimeDelayBus = reqGetTime + $"3";
-        public static readonly string reqGetTimeDelayTam = reqGetTime + $"2";
-        public static readonly string reqGetTimeDelayMetro = reqGetTime + $"1";
+       
+        public static readonly string reqForMostDelay = $"select lineNumber as 'lineNumber',sum(delays) as 'delays',trip_headsign from line where vehiculeType=@{LineServer.colvehiculeType} and year({LineServer.ColDateOb})=@{LineServer.ColDateOb} group by lineNumber,trip_headsign order by sum(delays) desc";
 
-        public static readonly string reqCountNotDelay = $"select count(distinct(tracking_vehicule.id_vehicule)) from tracking_vehicule" +
-            $" inner join VEHICULE on VEHICULE.idVeh=tracking_vehicule.id_vehicule " +
-            $"where tracking_vehicule.delay_min<'00:01' " +
-            $"AND date_observation >= @{ColDateObs} " +
-            $"AND date_observation<current_timestamp " +
-            $"and VEHICULE.id_category= ";
-
-        //definition de la category ( 3 = bus , 2 = metro , 1 = Tram ) 
-        public static readonly string reqCountNotDelayBus =reqCountNotDelay+$"3";
-        public static readonly string reqCountNotDelayMetro =reqCountNotDelay+$"2";
-        public static readonly string reqCountNotDelayTram=reqCountNotDelay+$"1";
-
-        // bonne requete quand on aura toutes les données 
-        // select distinct(tracking_vehicule.id_vehicule),line.lineNumber, line.hour_arrival,line.hour_departure,STATION.STATION_NAME, ap.STATION_NAME as 'stationDeparture' from tracking_vehicule inner join VEHICULE on VEHICULE.idVeh = tracking_vehicule.id_vehicule inner join line on line.idLine = VEHICULE.id_line inner join STATION on STATION.idstat=line.id_station_arrival inner join STATION as ap on ap.idstat=line.id_station_departure where delay_forecast>'00:10' and  CAST(tracking_vehicule.date_observation as DATE)=CAST(GETDATE() as DATE) order by line.LineNumber;
-        public static readonly string reqForWarning = $"select distinct(tracking_vehicule.id_vehicule),line.lineNumber, line.hour_arrival,line.hour_departure,cast(delay_forecast as varchar(5)) as 'delay_forecast',STATION.STATION_NAME, ap.STATION_NAME as 'stationDeparture' from tracking_vehicule" +
-            $" inner join VEHICULE on VEHICULE.idVeh = tracking_vehicule.id_vehicule " +
-            $"inner join line on line.idLine = VEHICULE.id_line " +
-            $"inner join STATION on STATION.idstat=line.id_station_arrival " +
-            $"inner join STATION as ap on ap.idstat=line.id_station_departure" +
-            $" where delay_forecast>'00:10' order by line.LineNumber";
-
-
-        public static readonly string reqForMostDelay = $"select distinct(line.idLine),line.lineNumber,STATION.STATION_NAME,ap.STATION_NAME as 'apStation',cast(delay_forecast as varchar(5)) as 'delay' from tracking_vehicule " +
-            $"inner join VEHICULE on VEHICULE.idVeh=tracking_vehicule.id_vehicule " +
-            $"inner join line on VEHICULE.id_line = line.idLine " +
-            $"inner join STATION on STATION.idstat = line.id_station_arrival " +
-            $"inner join STATION as ap on ap.idstat = line.id_station_departure " +
-            $"where VEHICULE.id_category=@{VehiculeServer.ColCategory}  order by 'delay' desc";
+        //renvoie les jours du mois selectionner par le graphiques avec le nombre de retars par mois 
+        public static readonly string reqGetDay = $"select avg(delays) as 'countVeh',cast(date_observation as varchar(11)) as 'dateOb',avg(snow24Hour) as 'neige',avg(prediction) as 'humidity',avg(windSpeed) as 'vent' ,avg(precip24hour)as 'precipitation',avg(visibility) as 'visibility'" +
+            $" from line where vehiculeType = @{LineServer.colvehiculeType}  and(year(date_observation))=year(@{TrackingVehiculeServer.ColVehicule})  and month(date_observation)=month(@{LineServer.ColDateOb})   group by cast(date_observation as varchar(11)) order by cast(date_observation as varchar(11)) ";
     }
 
 }

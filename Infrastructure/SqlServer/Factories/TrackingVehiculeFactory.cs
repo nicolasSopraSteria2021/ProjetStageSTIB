@@ -1,16 +1,5 @@
-﻿using ProjetStageSTIB.Domain.Line;
-using ProjetStageSTIB.Domain.Station;
-using ProjetStageSTIB.Domain.Tracking_Vehicule;
-using ProjetStageSTIB.Domain.Vehicules;
-using ProjetStageSTIB.Infrastructure.SqlServer.Lines;
-using ProjetStageSTIB.Infrastructure.SqlServer.Stations;
-using ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules;
-using ProjetStageSTIB.Infrastructure.SqlServer.Vehicule;
-using System;
-using System.Collections.Generic;
+﻿using ProjetStageSTIB.Domain.Tracking_Vehicule;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjetStageSTIB.Infrastructure.SqlServer.Factories
 {
@@ -20,7 +9,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Factories
         {
             return new TrackingVehicule
             {
-                DelayForecast = reader.GetString(reader.GetOrdinal("delay_forecast")),
+             /*   DelayForecast = reader.GetString(reader.GetOrdinal("delay_forecast")),
 
                 ID_Vehicule = new VehiculeModel
                 {
@@ -43,7 +32,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Factories
                         
                     },
                   
-                },
+                },*/
                     };
             }
         }

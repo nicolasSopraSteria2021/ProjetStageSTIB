@@ -15,24 +15,18 @@ namespace ProjetStageSTIB.Application.Service.TrackingVehicules
         int GetCountMetroTrackingVehicule(string dateObser);
 
 
-        //recupere le temps total de retard de chaque vehicule 
-        int GetTimeDelayBusTrackingVehicule(string dateObser);
-        int GetTimeDelayTramTrackingVehicule(string dateObser);
-        int GetTimeDelayMetroTrackingVehicule(string dateObser);
-
+    
 
         //recupere le nombre de vehicule non en retard 
         int GetCountBusNotDelay(string dateObser);
         int GetCountTramNotDelay(string dateObser);
         int GetCountMetroNotDelay(string dateObser);
 
-        //recupere les infos de tout les vehicules en retards 
-        IEnumerable<DtoWarningQueryTrackingVeh> GetInfoForWarning();
-
+       IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, string value, string monthValue);
         //recupere la date et le nombre de retard en fonction du type de données
-        IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(int vehiculeType/*,string timeChange*/);
+        IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(string vehiculeType,string value);
 
         //recupere les infos de la ligne la plus en retard
-        DtoQueryMostDelay GetInfoForMostDelay(int vehiculeType);
+        DtoQueryMostDelay GetInfoForMostDelay(string vehiculeType,string value);
     }
 }

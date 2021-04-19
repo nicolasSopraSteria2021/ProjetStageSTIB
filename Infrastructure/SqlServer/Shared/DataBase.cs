@@ -8,7 +8,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Shared
 {
     public static class DataBase
     {
-        private const string ConnectionString = @"Server=ITEM-S37587\SQLEXPRESS;Database=fake_Db_STIB;Integrated Security=SSPI";
+        private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=fake_Db_STIB;Integrated Security=SSPI";
 
         //Method allows to connect DB
         public static SqlConnection GetConnection()

@@ -4,9 +4,6 @@ using ProjetStageSTIB.Domain.Tracking_Vehicule;
 using ProjetStageSTIB.Infrastructure.SqlServer.Factories;
 using ProjetStageSTIB.Infrastructure.SqlServer.Lines;
 using ProjetStageSTIB.Infrastructure.SqlServer.Shared;
-using ProjetStageSTIB.Infrastructure.SqlServer.Stations;
-using ProjetStageSTIB.Infrastructure.SqlServer.Vehicule;
-using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -25,12 +22,15 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = TrackingVehiculeServer.reqGetCountByBus;
                 command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", dateObser);
-                double reader =(int)(command.ExecuteScalar());
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("retards") ? 0 : reader.GetInt32("retards");
 
-                sqlConnection.Close();
-                return (int)reader;
-                Console.WriteLine(reader);
-               
+                }
+                return result;
+
             }
         }
 
@@ -42,10 +42,14 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = TrackingVehiculeServer.reqGetCountByTram;
                 command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", dateObser);
-                int reader = (int)(command.ExecuteScalar());
-                sqlConnection.Close();
-                return reader;
-                Console.WriteLine(reader);
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read()) {
+                    result = reader.IsDBNull("retards") ? 0 : reader.GetInt32("retards");
+               
+                }
+                return result;
+          
 
             }
         }
@@ -57,60 +61,18 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = TrackingVehiculeServer.reqGetCountByMetro;
                 command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", dateObser);
-                int reader = (int)(command.ExecuteScalar());
-                sqlConnection.Close();
-                return reader;
+               var  reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("retards") ? 0 : reader.GetInt32("retards");
+
+                }
+                return result;
 
             }
         }
 
-        public int GetTimeDelayByBus(string DateObserstart)
-        {
-            using (var sqlConnection = DataBase.GetConnection())
-            {
-                sqlConnection.Open();
-                var command = sqlConnection.CreateCommand();
-                command.CommandText = TrackingVehiculeServer.reqGetTimeDelayBus;
-                command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", DateObserstart);
-                int reader = (int)(command.ExecuteScalar());
-                sqlConnection.Close();
-                return reader;
-                Console.WriteLine(reader);
-
-            }
-        }
-
-        public int GetTimeDelayByTram(string DateObserstart)
-        {
-            using (var sqlConnection = DataBase.GetConnection())
-            {
-                sqlConnection.Open();
-                var command = sqlConnection.CreateCommand();
-                command.CommandText = TrackingVehiculeServer.reqGetTimeDelayTam;
-                command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", DateObserstart);
-                int reader = (int)(command.ExecuteScalar());
-                sqlConnection.Close();
-                return reader;
-                Console.WriteLine(reader);
-
-            }
-        }
-
-        public int GetTimeDelayByMetro(string DateObserstart)
-        {
-            using (var sqlConnection = DataBase.GetConnection())
-            {
-                sqlConnection.Open();
-                var command = sqlConnection.CreateCommand();
-                command.CommandText = TrackingVehiculeServer.reqGetTimeDelayMetro;
-                command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", DateObserstart);
-                int reader = (int)(command.ExecuteScalar());
-                sqlConnection.Close();
-                return reader;
-                Console.WriteLine(reader);
-
-            }
-        }
 
         public int GetCountNotDelayBus(string dateObser)
         {
@@ -120,10 +82,14 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = TrackingVehiculeServer.reqCountNotDelayBus;
                 command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", dateObser);
-                int reader = (int)(command.ExecuteScalar());
-                sqlConnection.Close();
-                return reader;
-                Console.WriteLine(reader);
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("nonRetards") ? 0 : reader.GetInt32("nonRetards");
+
+                }
+                return result;
 
             }
         }
@@ -136,10 +102,14 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = TrackingVehiculeServer.reqCountNotDelayTram;
                 command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", dateObser);
-                int reader = (int)(command.ExecuteScalar());
-                sqlConnection.Close();
-                return reader;
-                Console.WriteLine(reader);
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("nonRetards") ? 0 : reader.GetInt32("nonRetards");
+
+                }
+                return result;
 
             }
         }
@@ -152,32 +122,20 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = TrackingVehiculeServer.reqCountNotDelayMetro;
                 command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColDateObs}", dateObser);
-                int reader = (int)(command.ExecuteScalar());
-                sqlConnection.Close();
-                return reader;
-                Console.WriteLine(reader);
-
-            }
-        }
-        public IEnumerable<ITrackingVehicule> GetInfoForWarning()
-        {
-            IList<ITrackingVehicule> vehicules = new List<ITrackingVehicule>();
-            using (var sqlConnection = DataBase.GetConnection())
-            {
-                sqlConnection.Open();
-                var command = sqlConnection.CreateCommand();
-                command.CommandText = TrackingVehiculeServer.reqForWarning;
-                var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-                while (reader.Read())
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
                 {
-                    vehicules.Add(_TrackingVehicule.CreateFromReader(reader));
+                    result = reader.IsDBNull("nonRetards") ? 0 : reader.GetInt32("nonRetards");
+
                 }
-                return vehicules;
+                return result;
 
             }
         }
+  
 
-        public IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(int vehiculeType/*,string timeChange*/)
+        public IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(string vehiculeType,string value)
         {
             IList<DtoSpecificTableDateObservation> vehicules = new List<DtoSpecificTableDateObservation>();
             using (var sqlConnection = DataBase.GetConnection())
@@ -185,8 +143,8 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 sqlConnection.Open();
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = LineServer.reqDateCountDelayForLine;
-                command.Parameters.AddWithValue($"@{VehiculeServer.ColCategory}", vehiculeType);
-               // command.Parameters.AddWithValue($"@{LineServer.colTimeChange}", timeChange);
+                command.Parameters.AddWithValue($"@{LineServer.colvehiculeType}", vehiculeType);
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", value);
                 var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 while (reader.Read())
                 {
@@ -201,7 +159,40 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
 
             }
         }
-        public DtoQueryMostDelay GetInfoForMostDelay(int vehiculeType)
+        //renvoies les jours du mois ciblé
+        public IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, string value,string monthValue )
+        {
+            IList<DtoSpecificTableDateObservation> vehicules = new List<DtoSpecificTableDateObservation>();
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = TrackingVehiculeServer.reqGetDay;
+                command.Parameters.AddWithValue($"@{LineServer.colvehiculeType}", vehiculeType);
+                command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColVehicule}", value);
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", monthValue);
+                var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+
+                    vehicules.Add(new DtoSpecificTableDateObservation
+                    {
+                        count = reader.GetInt32(reader.GetOrdinal("countVeh")),
+                        dateObservation = reader.GetString(reader.GetOrdinal("dateOb")),
+                        snow = reader.GetDouble(reader.GetOrdinal("neige")),
+                        relativeHumidity = reader.GetInt32(reader.GetOrdinal("humidity")),
+                        windSpeed = reader.GetDouble(reader.GetOrdinal("vent")),
+                        precip = reader.GetDouble(reader.GetOrdinal("precipitation")),
+                        visibility = reader.GetDouble(reader.GetOrdinal("visibility"))
+                    });
+                }
+                return vehicules;
+
+            }
+        }
+
+        //renvoie les informations sur la lignes la plus en retards
+        public DtoQueryMostDelay GetInfoForMostDelay(string vehiculeType,string value)
         {
             IList<DtoQueryMostDelay> vehicules = new List<DtoQueryMostDelay>();
             using (var sqlConnection = DataBase.GetConnection())
@@ -209,22 +200,22 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 sqlConnection.Open();
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = TrackingVehiculeServer.reqForMostDelay;
-                command.Parameters.AddWithValue($"@{VehiculeServer.ColCategory}", vehiculeType);
+                command.Parameters.AddWithValue($"@{LineServer.colvehiculeType}", vehiculeType);
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", value);
                 var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 while (reader.Read())
                 {
 
                     vehicules.Add(new DtoQueryMostDelay
                     {
-                        idLine = reader.GetInt32(reader.GetOrdinal(LineServer.ColId)),
-                        lineNumber = reader.GetInt32(reader.GetOrdinal(LineServer.ColLineNumber)),
-                        stationDeparture = reader.GetString(reader.GetOrdinal(StationServer.ColStationName)),
-                        stationArrival = reader.GetString(reader.GetOrdinal("apStation")),
-                        delayForecast = reader.GetString(reader.GetOrdinal("delay"))
+                        lineNumber = reader.GetInt32(reader.GetOrdinal("lineNumber")),
+                        stationDeparture = reader.GetString(reader.GetOrdinal(LineServer.Coltrip)),
+                        delayForecast = reader.GetInt32(reader.GetOrdinal("delays"))
                     });
                 }
                 return vehicules[0];               
             }
         }
+
     }
 }

@@ -226,5 +226,47 @@ create table tracking_vehicule (
                 FOREIGN KEY(id_vehicule) REFERENCES vehicule(idVeh)
 
 );
+
+use fake_Db_STIB;
+drop table line;
+create table line (
+
+                id int identity not null,
+
+                date_observation datetime not null,
+
+                delays int not null,
+
+                trip_headsign varchar(100) not null,
+
+				stop_name varchar(100) not null,
+
+				lineNumber int not null,
+
+				vehiculeType varchar(100) not null,
+
+				precip1Hour	float not null,
+				precip24Hour float not null,
+				precip6Hour	float not null,
+				relativeHumidity	float not null,
+				snow1Hour	float not null,
+				snow24Hour	float not null,
+				snow6Hour	float not null,
+				temperature float not null,
+				temperatureDewPoint float not null,
+				temperatureFeelsLike	float not null,
+				temperatureMax24Hour	float not null,
+				temperatureMin24Hour	float not null,
+				uvIndex	float not null,
+				visibility	float not null,
+				windSpeed	float not null,
+				prediction int not null ,
+
+                primary key(id)
+
+);
+ 
+
+
  
 

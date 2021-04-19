@@ -65,47 +65,29 @@ namespace ProjetStageSTIB.WebApi.Controllers
         {
             return Ok(_trackingVehiculeService.GetCountMetroNotDelay(dateObser));
         }
-
-        //
+      
+       
         [HttpGet]
-        [Route("TimeDelayBus/{dateObser:DateTime}")]
-        public ActionResult<int> GetTimeDelayBus(string dateObser)
+        [Route("InfoTable/{vehiculeType}/{value}")]
+        public ActionResult<DtoSpecificTableDateObservation> GetInfoForTable(string vehiculeType,string value)
         {
-            return Ok(_trackingVehiculeService.GetTimeDelayBusTrackingVehicule(dateObser));
-        }
-        [HttpGet]
-        [Route("TimeDelayMetro/{dateObser:DateTime}")]
-        public ActionResult<int> GetTimeDelayTram(string dateObser)
-        {
-            return Ok(_trackingVehiculeService.GetTimeDelayMetroTrackingVehicule(dateObser));
-        }
-        [HttpGet]
-        [Route("TimeDelayTram/{dateObser:DateTime}")]
-        public ActionResult<int> GetTimeDelayMetro(string dateObser)
-        {
-            return Ok(_trackingVehiculeService.GetTimeDelayTramTrackingVehicule(dateObser));
+            return Ok(_trackingVehiculeService.GetInfoForTable(vehiculeType,value));
         }
 
         [HttpGet]
-        [Route("InfoWaring")]
-        public ActionResult<DtoWarningQueryTrackingVeh> GetInfoForWarning()
+        [Route("InfoMostDelay/{vehiculeType}/{value}")]
+        public ActionResult<DtoQueryMostDelay> GetInfoForMostDelay(string vehiculeType,string value)
         {
-            return Ok(_trackingVehiculeService.GetInfoForWarning());
-        }
-        ///{timeChange:string}
-        [HttpGet]
-        [Route("InfoTable/{vehiculeType:int}")]
-        public ActionResult<DtoSpecificTableDateObservation> GetInfoForTable(int vehiculeType/*,string timeChange*/)
-        {
-            return Ok(_trackingVehiculeService.GetInfoForTable(vehiculeType/*,timeChange*/));
+            return Ok(_trackingVehiculeService.GetInfoForMostDelay(vehiculeType,value));
         }
 
         [HttpGet]
-        [Route("InfoMostDelay/{vehiculeType:int}")]
-        public ActionResult<DtoQueryMostDelay> GetInfoForMostDelay(int vehiculeType)
+        [Route("specificMonth/{vehiculeType}/{value}/{monthValue}")]
+        public ActionResult<DtoQueryMostDelay> GetDayByMonth(string vehiculeType, string value,string monthvalue)
         {
-            return Ok(_trackingVehiculeService.GetInfoForMostDelay(vehiculeType));
+            return Ok(_trackingVehiculeService.GetDayByMonth(vehiculeType,value,monthvalue));
         }
+
 
     }
 }

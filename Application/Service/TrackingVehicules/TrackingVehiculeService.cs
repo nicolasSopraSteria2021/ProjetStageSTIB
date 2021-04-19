@@ -34,25 +34,12 @@ namespace ProjetStageSTIB.Application.Service.TrackingVehicules
             return _trackingVehiculeRepository.GetCountDelayTram(dateObser);
         }
         // recupere le temps de retard de chaque vehicule par l'intermediaire du repository
-        public int GetTimeDelayBusTrackingVehicule(string dateObser)
-        {
-            return _trackingVehiculeRepository.GetTimeDelayByBus(dateObser);
-        }
-
-        public int GetTimeDelayTramTrackingVehicule(string dateObser)
-        {
-            return _trackingVehiculeRepository.GetTimeDelayByTram(dateObser);
-        }
-
-        public int GetTimeDelayMetroTrackingVehicule(string dateObser)
-        {
-            return _trackingVehiculeRepository.GetTimeDelayByMetro(dateObser);
-        }
+    
         // recupere le nombre de non retard de chaque vehicule par l'intermediaire du repository
         public int GetCountBusNotDelay(string dateObser)
         {
             return _trackingVehiculeRepository.GetCountNotDelayBus(dateObser);
-        }
+        } 
 
         public int GetCountTramNotDelay(string dateObser)
         {
@@ -63,30 +50,22 @@ namespace ProjetStageSTIB.Application.Service.TrackingVehicules
         {
             return _trackingVehiculeRepository.GetCountNotDelayMetro(dateObser);
         }
-        // recupere les lignes qui ont plus de 10 min de retard
-        public IEnumerable<DtoWarningQueryTrackingVeh> GetInfoForWarning()
+
+        public IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, string value, string monthValue)
         {
-            //creation du DTO
-            return _trackingVehiculeRepository.GetInfoForWarning().Select(vehicule => new DtoWarningQueryTrackingVeh
-            {
-                id = vehicule.Id,
-                stationArrival = vehicule.ID_Vehicule.Line.StationArrival.StationName,
-                stationDeparture = vehicule.ID_Vehicule.Line.StationDeparture.StationName,
-                lineNumber = vehicule.ID_Vehicule.Line.LineNumber,
-                hourArrival = vehicule.ID_Vehicule.Line.HourArrival,
-                hourDeparture = vehicule.ID_Vehicule.Line.HourDeparture,
-                delayForecast = vehicule.DelayForecast
-            });
+            return _trackingVehiculeRepository.GetDayByMonth(vehiculeType, value, monthValue);
         }
+
+
         //renvoie le nombre de retard ainsi que la date en fonction du numero definissant le type de vehicule
-        public IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(int vehiculeType/*, string timeChange*/)
+        public IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(string vehiculeType,string value)
         {
-            return _trackingVehiculeRepository.GetInfoForTable(vehiculeType/*,timeChange*/);
+            return _trackingVehiculeRepository.GetInfoForTable(vehiculeType,value);
         }
         //renvoie toutes les infos nécessaires a propos de la ligne la plus en retards
-        public DtoQueryMostDelay GetInfoForMostDelay(int vehiculeType)
+        public DtoQueryMostDelay GetInfoForMostDelay(string vehiculeType,string value)
         {
-            return _trackingVehiculeRepository.GetInfoForMostDelay(vehiculeType);
+            return _trackingVehiculeRepository.GetInfoForMostDelay(vehiculeType,value);
         }
     }
 }

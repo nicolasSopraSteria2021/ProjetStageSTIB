@@ -13,32 +13,41 @@ namespace ProjetStageSTIB.Application.Service.Lines
         //appel des repo 
         private readonly ILineRepository _LineRepository;
 
+
         public LineService(ILineRepository lineRepository)
         {
             _LineRepository = lineRepository;
 
         }
 
-        public IEnumerable<DtoLineForLinearChart> GetForecastFromLine(int lineNumber)
+        public DtoDetailsWeather getDetailsFromDate(string vehiculeType,string value)
         {
-            return _LineRepository.GetForecastFromLine(lineNumber);
+            return _LineRepository.getDetailsFromDate(vehiculeType,value);
         }
 
-        public IEnumerable<DtoLineForChart> getLineForCharts(int vehiculeType)
+        public IEnumerable<DtoDelayByHourBarChart> GetForecastFromLine(int lineNumber, string vehiculeType, string monthNumber)
         {
-            return _LineRepository.GetLineForChart(vehiculeType).Select(line => new DtoLineForChart
-            {
-                LineNumber = line.LineNumber,
-                NumberOfDelay = line.Id
-
-            });
+            return _LineRepository.getDelayByHourBarChart(lineNumber,vehiculeType,monthNumber);
         }
 
-        public IEnumerable<int> getNumberLineByCategory(int vehiculeType)
+        public IEnumerable<DtoLineForChart> getLineForCharts(string vehiculeType,string value)
+        {
+            return _LineRepository.GetLineForChart(vehiculeType,value);
+        }
+
+        public IEnumerable<string> GetMonthFromDb()
+        {
+            return _LineRepository.GetMonthFromDb();
+        }
+
+        public IEnumerable<int> getNumberLineByCategory(string vehiculeType)
         {
             return _LineRepository.GetNumberOfLine(vehiculeType);
         }
 
-
+        public IEnumerable<int> GetYearsFromDb()
+        {
+            return _LineRepository.GetYearsFromDb();
+        }
     }
 }

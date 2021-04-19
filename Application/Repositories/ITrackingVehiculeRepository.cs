@@ -23,20 +23,14 @@ namespace ProjetStageSTIB.Application.Repositories
 
         int GetCountNotDelayMetro(string dateObser);
 
+        //recupere les jours et les retards d'un mois 
+         IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, string value, string monthValue);
 
-        //recupère le tems de retard en seconde pour chaque type de vehicule en fonction de la date (TRAM/BUS/METRO)
-        int GetTimeDelayByBus(string DateObserstart);
-        int GetTimeDelayByTram(string DateObserstart);
-        int GetTimeDelayByMetro(string DateObserstart);
-
-
-        //récupère les infos des moyens de transport avec beaucoup de retard
-        IEnumerable<ITrackingVehicule> GetInfoForWarning();
 
         //recupere la date et le nombre de retard en fonction du type de vehicule
-         IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(int vehiculeType/*, string timeChange*/);
+         IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(string vehiculeType,string value);
 
         //recupere les infos pour la ligne la plus en retards 
-         DtoQueryMostDelay GetInfoForMostDelay(int vehiculeType);
+         DtoQueryMostDelay GetInfoForMostDelay(string vehiculeType,string value);
     }
 }
