@@ -10,10 +10,10 @@ namespace ProjetStageSTIB.Application.Service.Lines
 {
     public class LineService : ILineService
     {
-        //appel des repo 
+        //declaration du repository
         private readonly ILineRepository _LineRepository;
 
-
+        //constructeur permettant d'initialiser le repositories
         public LineService(ILineRepository lineRepository)
         {
             _LineRepository = lineRepository;
@@ -25,14 +25,20 @@ namespace ProjetStageSTIB.Application.Service.Lines
             return _LineRepository.getDetailsFromDate(vehiculeType,value);
         }
 
-        public IEnumerable<DtoDelayByHourBarChart> GetForecastFromLine(int lineNumber, string vehiculeType, string monthNumber)
+
+      
+        ///<param name="lineNumber">attribut de type int : permet d'identifier le numéro de ligne </param> 
+        /// <param name="vehiculeType">attribut de type string, exemple Bus</param> 
+        /// <param name="monthNumber">attribut de type string, exemple Feb 2021</param> 
+        /// <returns>retourne une liste de DtoDelayByHourBarChart </returns> 
+       public IEnumerable<DtoDelayByHourBarChart> GetDelayByHourBarChart(int lineNumber, string vehiculeType, string monthNumber)
         {
             return _LineRepository.getDelayByHourBarChart(lineNumber,vehiculeType,monthNumber);
         }
 
-        public IEnumerable<DtoLineForChart> getLineForCharts(string vehiculeType,string value)
+        public IEnumerable<DtoLineForChart> getLineForCharts(string vehiculeType, string value)
         {
-            return _LineRepository.GetLineForChart(vehiculeType,value);
+            return _LineRepository.GetLineForChart(vehiculeType, value);
         }
 
         public IEnumerable<string> GetMonthFromDb()

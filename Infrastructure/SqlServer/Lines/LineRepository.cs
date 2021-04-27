@@ -1,5 +1,6 @@
 ﻿using ProjetStageSTIB.Application.Repositories;
 using ProjetStageSTIB.Application.Service.Lines.Dto;
+using ProjetStageSTIB.Domain.NewLine;
 using ProjetStageSTIB.Infrastructure.SqlServer.Factories;
 using ProjetStageSTIB.Infrastructure.SqlServer.Shared;
 using System;
@@ -11,7 +12,9 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
     //redefini les méthodes de l'interface ILineRepository
     public class LineRepository : ILineRepository
     {
-      
+
+        private readonly IInstanceFromReaderFactory<INewLine> _factory = new LineFactory();
+        
         //renvoie les lignes pour le retard en fonction du numéro defissant le type de  vehicule
         public IEnumerable<DtoLineForChart> GetLineForChart(string vehiculeType,string value)
         {
@@ -30,9 +33,12 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
                     lines.Add(new DtoLineForChart
                     {
                         LineNumber = reader.GetInt32(reader.GetOrdinal("lineNumber")),
-                        NumberOfDelay = reader.GetInt32(reader.GetOrdinal("countDelay")),
-                        CountStopName = reader.GetInt32(reader.GetOrdinal("StopNameCount"))
-                    });
+                        delays = reader.GetInt32(reader.GetOrdinal("countDelay")),
+                        CountStopName =  reader.GetInt32(reader.GetOrdinal("StopNameCount")) 
+                    }); 
+                  
+                    
+
                 }
                 return lines;
             }
@@ -77,11 +83,11 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
                     //ajout a la liste le DTO crée 
                     lines.Add(new DtoDelayByHourBarChart
                     {
-                        delayForecast = reader.GetInt32(reader.GetOrdinal("delayForecast")),
+                        delayForecast = reader.GetInt32(reader.GetOrdinal("delayFromDb")),
                         hourArrival = reader.GetString(reader.GetOrdinal("timeArrival")),
                         prediction = reader.GetInt32(reader.GetOrdinal("prediction")),
                         snow = reader.GetDouble(reader.GetOrdinal("neige")),
-                        relativeHumidity = reader.GetDouble(reader.GetOrdinal("humidity")),
+                        relativeHumidity = reader.GetDouble(reader.GetOrdinal("temperature")),
                         windSpeed = reader.GetDouble(reader.GetOrdinal("vent")),
                         precip = reader.GetDouble(reader.GetOrdinal("precipitation")),
                         visibility = reader.GetDouble(reader.GetOrdinal("visibility"))

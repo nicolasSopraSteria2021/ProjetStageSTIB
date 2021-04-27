@@ -5,14 +5,14 @@ namespace ProjetStageSTIB.WebApi.Controllers
 {
     //controller, c'est ici qu'on va etablir les appels que pourra faire le FT pour avoir accès aux éléments de la db
     [ApiController]
-    [Route("api/Vehicule")]
-    public class VehiculeController : ControllerBase
+    [Route("api/line")]
+    public class LineController : ControllerBase
     {
 
      
         private readonly ILineService _lineService;
 
-        public VehiculeController(ILineService lineService)
+        public LineController(ILineService lineService)
         {
             _lineService = lineService;
         }
@@ -33,9 +33,9 @@ namespace ProjetStageSTIB.WebApi.Controllers
 
         [HttpGet]
         [Route("dataForecast/{lineNumber:int}/{vehiculeType}/{monthNumber}")]
-        public ActionResult<DtoDelayByHourBarChart> GetForecastFromLine(int lineNumber, string vehiculeType, string monthNumber)
+        public ActionResult<DtoDelayByHourBarChart> GetDelayByHourBarChart(int lineNumber, string vehiculeType, string monthNumber)
         {
-            return Ok(_lineService.GetForecastFromLine(lineNumber,vehiculeType,monthNumber));
+            return Ok(_lineService.GetDelayByHourBarChart(lineNumber,vehiculeType,monthNumber));
         }
 
         [HttpGet]

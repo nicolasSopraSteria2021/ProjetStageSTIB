@@ -51,7 +51,7 @@ namespace ProjetStageSTIB.Application.Service.TrackingVehicules
             return _trackingVehiculeRepository.GetCountNotDelayMetro(dateObser);
         }
 
-        public IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, string value, string monthValue)
+        public IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, int value, string monthValue)
         {
             return _trackingVehiculeRepository.GetDayByMonth(vehiculeType, value, monthValue);
         }

@@ -22,7 +22,7 @@ namespace ProjetStageSTIB.Application.Service.TrackingVehicules
         int GetCountTramNotDelay(string dateObser);
         int GetCountMetroNotDelay(string dateObser);
 
-       IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, string value, string monthValue);
+       IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, int value, string monthValue);
         //recupere la date et le nombre de retard en fonction du type de données
         IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(string vehiculeType,string value);
 

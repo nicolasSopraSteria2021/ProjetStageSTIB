@@ -11,9 +11,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
 {
     public class TrackingVehiculeRepository : ITrackingVehiculeRepository
     {
-        //Instance of TrackingFactory
-        private readonly IInstanceFromReaderFactory<ITrackingVehicule> _TrackingVehicule = new TrackingVehiculeFactory();
-
+        
         public int GetCountDelayBus(string dateObser)
         {
             using (var sqlConnection = DataBase.GetConnection())
@@ -160,7 +158,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
             }
         }
         //renvoies les jours du mois ciblé
-        public IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, string value,string monthValue )
+        public IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, int value,string monthValue )
         {
             IList<DtoSpecificTableDateObservation> vehicules = new List<DtoSpecificTableDateObservation>();
             using (var sqlConnection = DataBase.GetConnection())
@@ -169,7 +167,6 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
                 var command = sqlConnection.CreateCommand();
                 command.CommandText = TrackingVehiculeServer.reqGetDay;
                 command.Parameters.AddWithValue($"@{LineServer.colvehiculeType}", vehiculeType);
-                command.Parameters.AddWithValue($"@{TrackingVehiculeServer.ColVehicule}", value);
                 command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", monthValue);
                 var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
                 while (reader.Read())

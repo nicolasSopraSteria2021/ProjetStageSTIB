@@ -20,5 +20,7 @@ namespace ProjetStageSTIB.Application.Service.Lines.Dto
         public double precip { get; set; }
 
         public double visibility { get; set; }
+
+        public double temperature { get; set; }
     }
 }

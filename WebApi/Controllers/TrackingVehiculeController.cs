@@ -82,8 +82,8 @@ namespace ProjetStageSTIB.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("specificMonth/{vehiculeType}/{value}/{monthValue}")]
-        public ActionResult<DtoQueryMostDelay> GetDayByMonth(string vehiculeType, string value,string monthvalue)
+        [Route("specificMonth/{vehiculeType}/{value:int}/{monthValue}")]
+        public ActionResult<DtoQueryMostDelay> GetDayByMonth(string vehiculeType, int value,string monthvalue)
         {
             return Ok(_trackingVehiculeService.GetDayByMonth(vehiculeType,value,monthvalue));
         }

@@ -24,7 +24,7 @@ namespace ProjetStageSTIB.Application.Repositories
         int GetCountNotDelayMetro(string dateObser);
 
         //recupere les jours et les retards d'un mois 
-         IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, string value, string monthValue);
+         IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, int value, string monthValue);
 
 
         //recupere la date et le nombre de retard en fonction du type de vehicule

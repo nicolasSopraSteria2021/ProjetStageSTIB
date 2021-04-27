@@ -17,7 +17,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
 
 
         //renvoie le nombre de retard en fonction d'une date 
-        public static readonly string reqCount = $"select sum(delays) as 'retards' from line where date_observation >=@{ColDateObs} and date_observation<current_timestamp and vehiculeType like('";
+        public static readonly string reqCount = $"select count(delays) as 'retards' from line where date_observation >=@{ColDateObs} and date_observation<current_timestamp and vehiculeType like('";
 
         public static readonly string reqGetCountByBus = reqCount + $"Bus')";
         public static readonly string reqGetCountByMetro = reqCount + $"Metro')";
@@ -35,7 +35,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules
 
         //renvoie les jours du mois selectionner par le graphiques avec le nombre de retars par mois 
         public static readonly string reqGetDay = $"select avg(delays) as 'countVeh',cast(date_observation as varchar(11)) as 'dateOb',avg(snow24Hour) as 'neige',avg(prediction) as 'humidity',avg(windSpeed) as 'vent' ,avg(precip24hour)as 'precipitation',avg(visibility) as 'visibility'" +
-            $" from line where vehiculeType = @{LineServer.colvehiculeType}  and(year(date_observation))=year(@{TrackingVehiculeServer.ColVehicule})  and month(date_observation)=month(@{LineServer.ColDateOb})   group by cast(date_observation as varchar(11)) order by cast(date_observation as varchar(11)) ";
+            $" from line where vehiculeType = @{LineServer.colvehiculeType}  and(year(date_observation))=year(@{LineServer.ColDateOb}) and month(date_observation)=month(@{LineServer.ColDateOb})   group by cast(date_observation as varchar(11)) order by cast(date_observation as varchar(11)) ";
     }
 
 }

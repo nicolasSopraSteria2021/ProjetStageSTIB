@@ -15,7 +15,7 @@ namespace ProjetStageSTIB.Application.Service.Lines
         public IEnumerable<int> getNumberLineByCategory(string vehiculeType);
 
         //renvoie les données de retards pour le graphique
-        public IEnumerable<DtoDelayByHourBarChart> GetForecastFromLine(int lineNumber, string vehiculeType, string monthNumber);
+        public IEnumerable<DtoDelayByHourBarChart> GetDelayByHourBarChart(int lineNumber, string vehiculeType, string monthNumber);
 
         public IEnumerable<string> GetMonthFromDb();
 

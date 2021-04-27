@@ -21,21 +21,21 @@ namespace ProjetStageSTIB.Domain.NewLine
 
 		string vehiculeType { get; set; }
 
-		string precip1Hour { get; set; }
-		string precip24Hour { get; set; }
-		string precip6Hour { get; set; }
-		string relativeHumidity { get; set; }
-		string snow1Hour { get; set; }
-		string snow24Hour { get; set; }
-		string snow6Hour { get; set; }
-		string temperature { get; set; }
-		string temperatureDewPo { get; set; }
-		string temperatureFeelsLike { get; set; }
-		string temperatureMax24Hour { get; set; }
-		string temperatureMin24Hour { get; set; }
-		string uvIndex { get; set; }
-		string visibility { get; set; }
-		string windSpeed { get; set; }
+		double precip1Hour { get; set; }
+		double precip24Hour { get; set; }
+		double precip6Hour { get; set; }
+		double relativeHumidity { get; set; }
+		double snow1Hour { get; set; }
+		double snow24Hour { get; set; }
+		double snow6Hour { get; set; }
+		double temperature { get; set; }
+		double temperatureDewPo { get; set; }
+		double temperatureFeelsLike { get; set; }
+		double temperatureMax24Hour { get; set; }
+		double temperatureMin24Hour { get; set; }
+		double uvIndex { get; set; }
+		double visibility { get; set; }
+		double windSpeed { get; set; }
 		int prediction { get; set; }
 	}
 }
