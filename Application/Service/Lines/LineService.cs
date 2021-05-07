@@ -1,5 +1,6 @@
 ﻿using ProjetStageSTIB.Application.Repositories;
 using ProjetStageSTIB.Application.Service.Lines.Dto;
+using ProjetStageSTIB.Application.Service.TrackingVehicules.Dto;
 using ProjetStageSTIB.Infrastructure.SqlServer.Lines;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,49 @@ namespace ProjetStageSTIB.Application.Service.Lines
         public IEnumerable<int> GetYearsFromDb()
         {
             return _LineRepository.GetYearsFromDb();
+        }
+
+        // recupere le nombre de retard de chaque vehicule par l'intermediaire du repository
+        public int GetCountBusTrackingVehicule(string dateObser)
+        {
+            return _LineRepository.GetCountDelayBus(dateObser);
+        }
+
+       
+
+        public int GetCountTramTrackingVehicule(string dateObser)
+        {
+            return _LineRepository.GetCountDelayTram(dateObser);
+        }
+        // recupere le temps de retard de chaque vehicule par l'intermediaire du repository
+
+        // recupere le nombre de non retard de chaque vehicule par l'intermediaire du repository
+        public int GetCountBusNotDelay(string dateObser)
+        {
+            return _LineRepository.GetCountNotDelayBus(dateObser);
+        }
+
+        public int GetCountTramNotDelay(string dateObser)
+        {
+            return _LineRepository.GetCountNotDelayTram(dateObser);
+        }
+
+  
+        public IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, int value, string monthValue)
+        {
+            return _LineRepository.GetDayByMonth(vehiculeType, value, monthValue);
+        }
+
+
+        //renvoie le nombre de retard ainsi que la date en fonction du numero definissant le type de vehicule
+        public IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(string vehiculeType, string value)
+        {
+            return _LineRepository.GetInfoForTable(vehiculeType, value);
+        }
+        //renvoie toutes les infos nécessaires a propos de la ligne la plus en retards
+        public DtoQueryMostDelay GetInfoForMostDelay(string vehiculeType, string value)
+        {
+            return _LineRepository.GetInfoForMostDelay(vehiculeType, value);
         }
     }
 }

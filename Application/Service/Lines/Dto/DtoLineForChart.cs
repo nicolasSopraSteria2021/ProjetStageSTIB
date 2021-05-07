@@ -19,10 +19,22 @@ namespace ProjetStageSTIB.Application.Service.Lines.Dto
 
         public DtoLineForChart(int numberOfDelay,int lineNumber,int countStopName)
         {
-            delays = numberOfDelay;
-            LineNumber = lineNumber;
-            CountStopName = countStopName;
+            if(delays>=0)
+                delays = numberOfDelay;
+            if (LineNumber >0)
+                LineNumber = lineNumber;
+            if (CountStopName>0)
+                CountStopName = countStopName;
         }
-       
+
+        public override bool Equals(object obj)
+        {
+            return obj is DtoLineForChart chart &&
+                   delays == chart.delays &&
+                   LineNumber == chart.LineNumber &&
+                   CountStopName == chart.CountStopName;
+        }
+
+
     }
 }

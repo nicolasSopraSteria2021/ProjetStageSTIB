@@ -1,5 +1,6 @@
 ﻿using ProjetStageSTIB.Application.Repositories;
 using ProjetStageSTIB.Application.Service.Lines.Dto;
+using ProjetStageSTIB.Application.Service.TrackingVehicules.Dto;
 using ProjetStageSTIB.Domain.NewLine;
 using ProjetStageSTIB.Infrastructure.SqlServer.Factories;
 using ProjetStageSTIB.Infrastructure.SqlServer.Shared;
@@ -14,11 +15,11 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
     {
 
         private readonly IInstanceFromReaderFactory<INewLine> _factory = new LineFactory();
-        
+
         //renvoie les lignes pour le retard en fonction du numéro defissant le type de  vehicule
-        public IEnumerable<DtoLineForChart> GetLineForChart(string vehiculeType,string value)
+        public IEnumerable<DtoLineForChart> GetLineForChart(string vehiculeType, string value)
         {
-            IList<DtoLineForChart> lines= new List<DtoLineForChart>();
+            IList<DtoLineForChart> lines = new List<DtoLineForChart>();
             using (var sqlConnection = DataBase.GetConnection())
             {
                 sqlConnection.Open();
@@ -32,18 +33,15 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
                 {
                     lines.Add(new DtoLineForChart
                     {
-                        LineNumber = reader.GetInt32(reader.GetOrdinal("lineNumber")),
-                        delays = reader.GetInt32(reader.GetOrdinal("countDelay")),
-                        CountStopName =  reader.GetInt32(reader.GetOrdinal("StopNameCount")) 
-                    }); 
-                  
-                    
-
+                        LineNumber = reader.IsDBNull("lineNumber") ? 0 : reader.GetInt32(reader.GetOrdinal("lineNumber")),
+                        delays = reader.IsDBNull("countDelay") ? 0 : reader.GetInt32(reader.GetOrdinal("countDelay")),
+                        CountStopName = reader.IsDBNull("StopNameCount") ? 0 : reader.GetInt32(reader.GetOrdinal("StopNameCount"))
+                    });
                 }
                 return lines;
             }
         }
-            
+
         //renvoie tous les numeros de lignes disponible 
         public IEnumerable<int> GetNumberOfLine(string vehiculeType)
         {
@@ -57,16 +55,15 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
                 command.CommandText = LineServer.reqGetLineNumberByCategory;
                 var reader = command.ExecuteReader();
                 //tant que le reader arrive a lire quelque chose 
-                while(reader.Read())
-                //on va ajouter l'entier que l'on trouve a la colonne lineNumber
-                    lines.Add(reader.GetInt32(reader.GetOrdinal("lineNumber")));
-                
+                while (reader.Read())
+                    //on va ajouter l'entier que l'on trouve a la colonne lineNumber
+                    lines.Add(reader.IsDBNull("lineNumber") ? 0 : reader.GetInt32(reader.GetOrdinal("lineNumber")));
                 return lines;
             }
 
         }
 
-        public IEnumerable<DtoDelayByHourBarChart> getDelayByHourBarChart(int lineNumber,string vehiculeType,string monthNumber)
+        public IEnumerable<DtoDelayByHourBarChart> getDelayByHourBarChart(int lineNumber, string vehiculeType, string monthNumber)
         {
             //creation d'une liste 
             IList<DtoDelayByHourBarChart> lines = new List<DtoDelayByHourBarChart>();
@@ -83,14 +80,14 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
                     //ajout a la liste le DTO crée 
                     lines.Add(new DtoDelayByHourBarChart
                     {
-                        delayForecast = reader.GetInt32(reader.GetOrdinal("delayFromDb")),
-                        hourArrival = reader.GetString(reader.GetOrdinal("timeArrival")),
-                        prediction = reader.GetInt32(reader.GetOrdinal("prediction")),
-                        snow = reader.GetDouble(reader.GetOrdinal("neige")),
-                        relativeHumidity = reader.GetDouble(reader.GetOrdinal("temperature")),
-                        windSpeed = reader.GetDouble(reader.GetOrdinal("vent")),
-                        precip = reader.GetDouble(reader.GetOrdinal("precipitation")),
-                        visibility = reader.GetDouble(reader.GetOrdinal("visibility"))
+                        delayForecast = reader.IsDBNull("delayFromDb") ? 0 : reader.GetInt32(reader.GetOrdinal("delayFromDb")),
+                        hourArrival = reader.IsDBNull("timeArrival") ? "" : reader.GetString(reader.GetOrdinal("timeArrival")),
+                        prediction = reader.IsDBNull("prediction") ? 0 : reader.GetInt32(reader.GetOrdinal("prediction")),
+                        snow = reader.IsDBNull("neige") ? 0 : reader.GetDouble(reader.GetOrdinal("neige")),
+                        relativeHumidity = reader.IsDBNull("temperature") ? 0 : reader.GetDouble(reader.GetOrdinal("temperature")),
+                        windSpeed = reader.IsDBNull("vent") ? 0 : reader.GetDouble(reader.GetOrdinal("vent")),
+                        precip = reader.IsDBNull("precipitation") ? 0 : reader.GetDouble(reader.GetOrdinal("precipitation")),
+                        visibility = reader.IsDBNull("visibility") ? 0 : reader.GetDouble(reader.GetOrdinal("visibility"))
                     });
 
                 return lines;
@@ -110,7 +107,7 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
                 int result = 0;
                 while (reader.Read()) {
                     result = reader.IsDBNull("timeDb") ? 0 : reader.GetInt32("timeDb");
-                lines.Add(result);
+                    lines.Add(result);
                 }
                 return lines;
             }
@@ -162,20 +159,203 @@ namespace ProjetStageSTIB.Infrastructure.SqlServer.Lines
 
                     });
                 }
-                   
-                    Console.WriteLine(dtoweahterList.Count);
-                    dto = new DtoDetailsWeather
-                    {
-                        snow = (dtoweahterList[0].snow / dtoweahterList[1].snow) * 100,
-                        relativeHumidity = (dtoweahterList[0].relativeHumidity / dtoweahterList[1].relativeHumidity) * 100,
-                        windSpeed = (dtoweahterList[0].windSpeed / dtoweahterList[1].windSpeed) * 100,
-                        precip = (dtoweahterList[0].precip / dtoweahterList[1].precip) * 100,
-                        visibility = (dtoweahterList[0].visibility / dtoweahterList[1].visibility) * 100
-                    };
+
+                Console.WriteLine(dtoweahterList.Count);
+                dto = new DtoDetailsWeather
+                {
+                    snow = (dtoweahterList[0].snow / dtoweahterList[1].snow) * 100,
+                    relativeHumidity = (dtoweahterList[0].relativeHumidity / dtoweahterList[1].relativeHumidity) * 100,
+                    windSpeed = (dtoweahterList[0].windSpeed / dtoweahterList[1].windSpeed) * 100,
+                    precip = (dtoweahterList[0].precip / dtoweahterList[1].precip) * 100,
+                    visibility = (dtoweahterList[0].visibility / dtoweahterList[1].visibility) * 100
+                };
+            }
+            return dto;
+        }
+        public int GetCountDelayBus(string dateObser)
+        {
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = LineServer.reqGetCountByBus;
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", dateObser);
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("retards") ? 0 : reader.GetInt32("retards");
+
                 }
-                return dto;
+                return result;
+
             }
         }
 
+        public int GetCountDelayTram(string dateObser)
+        {
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = LineServer.reqGetCountByTram;
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", dateObser);
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("retards") ? 0 : reader.GetInt32("retards");
+
+                }
+                return result;
+
+
+            }
+        }
+      
+        public int GetCountNotDelayBus(string dateObser)
+        {
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = LineServer.reqCountNotDelayBus;
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", dateObser);
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("nonRetards") ? 0 : reader.GetInt32("nonRetards");
+
+                }
+                return result;
+
+            }
+        }
+
+        public int GetCountNotDelayTram(string dateObser)
+        {
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = LineServer.reqCountNotDelayTram;
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", dateObser);
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("nonRetards") ? 0 : reader.GetInt32("nonRetards");
+
+                }
+                return result;
+
+            }
+        }
+
+        public int GetCountNotDelayMetro(string dateObser)
+        {
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = LineServer.reqCountNotDelayMetro;
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", dateObser);
+                var reader = (command.ExecuteReader(CommandBehavior.CloseConnection));
+                int result = 0;
+                if (reader.Read())
+                {
+                    result = reader.IsDBNull("nonRetards") ? 0 : reader.GetInt32("nonRetards");
+
+                }
+                return result;
+
+            }
+        }
+
+
+        public IEnumerable<DtoSpecificTableDateObservation> GetInfoForTable(string vehiculeType, string value)
+        {
+            IList<DtoSpecificTableDateObservation> vehicules = new List<DtoSpecificTableDateObservation>();
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = LineServer.reqDateCountDelayForLine;
+                command.Parameters.AddWithValue($"@{LineServer.colvehiculeType}", vehiculeType);
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", value);
+                var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+
+                    vehicules.Add(new DtoSpecificTableDateObservation
+                    {
+                        count = reader.GetInt32(reader.GetOrdinal("countVeh")),
+                        dateObservation = reader.GetString(reader.GetOrdinal("dateOb"))
+                    });
+                }
+                return vehicules;
+
+            }
+        }
+        //renvoies les jours du mois ciblé
+        public IEnumerable<DtoSpecificTableDateObservation> GetDayByMonth(string vehiculeType, int value, string monthValue)
+        {
+            IList<DtoSpecificTableDateObservation> vehicules = new List<DtoSpecificTableDateObservation>();
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = LineServer.reqGetDay;
+                command.Parameters.AddWithValue($"@{LineServer.colvehiculeType}", vehiculeType);
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", monthValue);
+                var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+
+                    vehicules.Add(new DtoSpecificTableDateObservation
+                    {
+                        count = reader.GetInt32(reader.GetOrdinal("countVeh")),
+                        dateObservation = reader.GetString(reader.GetOrdinal("dateOb")),
+                        snow = reader.GetDouble(reader.GetOrdinal("neige")),
+                        relativeHumidity = reader.GetInt32(reader.GetOrdinal("humidity")),
+                        windSpeed = reader.GetDouble(reader.GetOrdinal("vent")),
+                        precip = reader.GetDouble(reader.GetOrdinal("precipitation")),
+                        visibility = reader.GetDouble(reader.GetOrdinal("visibility"))
+                    });
+                }
+                return vehicules;
+
+            }
+        }
+
+        //renvoie les informations sur la lignes la plus en retards
+        public DtoQueryMostDelay GetInfoForMostDelay(string vehiculeType, string value)
+        {
+            IList<DtoQueryMostDelay> vehicules = new List<DtoQueryMostDelay>();
+            using (var sqlConnection = DataBase.GetConnection())
+            {
+                sqlConnection.Open();
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = LineServer.reqForMostDelay;
+                command.Parameters.AddWithValue($"@{LineServer.colvehiculeType}", vehiculeType);
+                command.Parameters.AddWithValue($"@{LineServer.ColDateOb}", value);
+                var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+
+                    vehicules.Add(new DtoQueryMostDelay
+                    {
+                        lineNumber = reader.IsDBNull("lineNumber") ? 0 : reader.GetInt32("lineNumber"),
+                        stationDeparture = reader.GetString(reader.GetOrdinal(LineServer.Coltrip)),
+                        delayForecast = reader.IsDBNull("delays") ? 0 : reader.GetInt32("delays")
+                    });
+                }
+                return vehicules[0];
+            }
+        }
+
+       }
     }
+
 

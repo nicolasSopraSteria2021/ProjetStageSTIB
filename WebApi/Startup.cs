@@ -5,9 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjetStageSTIB.Application.Repositories;
 using ProjetStageSTIB.Application.Service.Lines;
-using ProjetStageSTIB.Application.Service.TrackingVehicules;
 using ProjetStageSTIB.Infrastructure.SqlServer.Lines;
-using ProjetStageSTIB.Infrastructure.SqlServer.TrackingVehicules;
+
 
 namespace ProjetStageSTIB
 {
@@ -33,11 +32,6 @@ namespace ProjetStageSTIB
                      builder.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
                  });
             });
-
-
-            
-            services.AddSingleton<ITrackingVehiculeService, TrackingVehiculeService>();
-            services.AddSingleton<ITrackingVehiculeRepository, TrackingVehiculeRepository>();
             services.AddSingleton<ILineService, LineService>();
             services.AddSingleton<ILineRepository, LineRepository>();
         }
